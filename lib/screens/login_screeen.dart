@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:products_app/providers/login_form_provider.dart';
 
 import 'package:products_app/shared/input_decorations.dart';
 
@@ -26,7 +29,10 @@ class LoginScreeen extends StatelessWidget {
 										Text('LOGIN', style: Theme.of(context).textTheme.headline5),
 										const SizedBox(height: 30),
 
-										const _LoginForm()
+                              ChangeNotifierProvider(
+                                 create: ( _ ) =>  LoginFormProvider(),
+                                 child: _LoginForm(),
+                              ),
 
 									],
 								),
@@ -43,13 +49,17 @@ class LoginScreeen extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-	const _LoginForm({
-		Key? key,
-	}) : super(key: key);
 
 	@override
 	Widget build(BuildContext context) {
+
+      final loginForm = Provider.of<LoginFormProvider>(context);
+
 		return Form(
+
+         key: loginForm.formKey,
+         autovalidateMode: AutovalidateMode.onUserInteraction,
+
 			child: Column(
 				children: [
 
@@ -61,6 +71,13 @@ class _LoginForm extends StatelessWidget {
 							hintText: 'user@correo.com', 
 							prefixIcon: Icons.alternate_email_rounded
 						),
+                  onChanged: ( value ) => loginForm.email = value,
+                  validator: ( value ) {
+                     String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                     RegExp regExp = RegExp(pattern);
+
+                     return regExp.hasMatch(value ?? '') ? null : 'No es un correo válido';
+                  },
 					),
 
 					const SizedBox(height: 30),
@@ -74,6 +91,14 @@ class _LoginForm extends StatelessWidget {
 							hintText: '*****', 
 							prefixIcon: Icons.lock
 						),
+                  onChanged: ( value ) => loginForm.password = value,
+                  validator: ( value ) {
+                     
+                     if ( value != null && value.length >= 7) return null;
+
+                     return 'La contraseña debe ser de 7 caracteres';
+
+                  },
 					),
 
 					const SizedBox(height: 30),
@@ -85,12 +110,25 @@ class _LoginForm extends StatelessWidget {
 						color: Colors.deepPurple,
 						child: Container(
 							padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-							child: const Text(
-								'INGRESAR',
-								style: TextStyle( color: Colors.white ),
+							child: Text(
+                        loginForm.isLoading ? 'Cargando...' : 'Ingresar',
+								style: const TextStyle( color: Colors.white ),
 								),
 						),
-						onPressed: () {}
+						onPressed: loginForm.isLoading ? null : () async {
+
+                     FocusScope.of(context).unfocus();
+                     
+                     if( !loginForm.isValidateForm() ) return;
+
+                     loginForm.isLoading = true;
+
+                     await Future.delayed(const Duration(seconds: 1));
+
+                     loginForm.isLoading = false;
+
+                     Navigator.pushReplacementNamed(context, 'home');
+                  }
 					)
 
 				],
