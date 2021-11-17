@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+
+import 'package:products_app/services/services.dart';
 
 import 'package:products_app/screens/screens.dart';
 
@@ -7,7 +10,22 @@ void main() async {
 
    await dotenv.load();
 
-   runApp(const MyApp());
+   runApp(const StateApp());
+}
+
+class StateApp extends StatelessWidget {
+  
+  const StateApp({Key? key}) : super(key: key);
+
+   @override
+   Widget build(BuildContext context) {
+      return MultiProvider(
+         providers: [
+            ChangeNotifierProvider(create: ( _ ) => ProductsService())
+         ],
+         child: const MyApp(),
+      );
+   }
 }
 
 class MyApp extends StatelessWidget {
