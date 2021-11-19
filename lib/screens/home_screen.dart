@@ -13,7 +13,6 @@ class HomeScreeen extends StatelessWidget {
    @override
    Widget build(BuildContext context) {
 
-      // ignore: unused_local_variable
       final productService = Provider.of<ProductsService>(context);
 
       if (productService.isLoading) return const LoadingScreen();
@@ -27,8 +26,11 @@ class HomeScreeen extends StatelessWidget {
             itemCount: productService.products.length,
             itemBuilder: ( BuildContext context, int index ) {
                return GestureDetector(
-                  child: ProductCard(product: productService.products[index],),
-                  onTap: () => Navigator.pushNamed(context, 'product_details'),
+                  child: ProductCard(product: productService.products[index]),
+                  onTap: () {
+                     productService.selectdProduct = productService.products[index].copy();
+                     Navigator.pushNamed(context, 'product_details');
+                  },
                );
             }
          ),

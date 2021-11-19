@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
             child: Stack(
                children: [
 
-                  const _BackgroundImage(),
+                  _BackgroundImage(url: product.image),
 
                   Positioned(
                      left: 0,

@@ -10,6 +10,9 @@ class ProductsService extends ChangeNotifier {
 
    final String _baseUrl = dotenv.get('FIREBASE_BASE_URL');
    final List<Product> products = [];
+   
+   late Product selectdProduct;
+
    bool isLoading = true;
 
    ProductsService() {
