@@ -48,7 +48,7 @@ class ProductCard extends StatelessWidget {
    }
 
    BoxDecoration _cardBorders() => BoxDecoration(
-      color: Colors.deepPurpleAccent,
+      color: Colors.white,
       borderRadius: BorderRadius.circular(30),
       boxShadow: const <BoxShadow> [
          BoxShadow(

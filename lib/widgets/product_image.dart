@@ -14,19 +14,21 @@ class ProductImage extends StatelessWidget {
             width: double.infinity,
             height: 450,
             decoration: _buildBoxDecaration(),
-            child: url == null
+            child: Opacity(
+               opacity: 0.9,
+               child: url == null
                ? const Image(image: AssetImage('assets/no-image.png'))
                : FadeInImage(
                   placeholder: const AssetImage('assets/loading.gif'),
                   image: NetworkImage(url!),
                   fit: BoxFit.cover,
                ),
+            )
          )
       );
    }
 
    BoxDecoration _buildBoxDecaration() => BoxDecoration(
-      borderRadius: BorderRadius.circular(30),
       boxShadow: [
          BoxShadow(
             color: Colors.black.withOpacity(0.5),
@@ -34,6 +36,6 @@ class ProductImage extends StatelessWidget {
             offset: const Offset(0,0)
          ),
       ],
-      color: Colors.deepPurpleAccent
+      color: Colors.white
    );
 }
