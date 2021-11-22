@@ -8,9 +8,9 @@ import 'package:products_app/services/services.dart';
 import 'package:products_app/shared/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductScreen extends StatelessWidget {
 
-   const ProductDetailsScreen({Key? key}) : super(key: key);
+   const ProductScreen({Key? key}) : super(key: key);
 
    @override
    Widget build(BuildContext context) {
@@ -114,9 +114,6 @@ class _Form extends StatelessWidget {
 
                   TextFormField(
                      initialValue: product.name,
-                     inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                     ],
                      onChanged: ( value ) => product.name = value,
                      validator: ( value ) {
                         if( value == null || value.isEmpty ) {
@@ -132,6 +129,9 @@ class _Form extends StatelessWidget {
                   const SizedBox(height: 30),
                   TextFormField(
                      initialValue: '${product.price}',
+                     inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                     ],
                      onChanged: ( value ) => {
                         if ( double.tryParse(value) == null ) {
                            product.price = 0

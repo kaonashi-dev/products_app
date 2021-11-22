@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:products_app/models/product.dart';
-import 'package:products_app/services/services.dart';
 
 class ProductFormProvider extends ChangeNotifier {
 
@@ -18,6 +17,7 @@ class ProductFormProvider extends ChangeNotifier {
 
    bool isValidateForm() {
 
+      // ignore: avoid_print
       print(product.name); 
 
       return formKey.currentState?.validate() ?? false;
