@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,6 +13,8 @@ class ProductsService extends ChangeNotifier {
    final List<Product> products = [];
    
    late Product selectdProduct;
+   
+   File? newPicture;
 
    bool isLoading = true;
    bool isSaving = true;
@@ -84,4 +87,12 @@ class ProductsService extends ChangeNotifier {
       return product.id;
    }
 
+   void updateSelectedPoductImage( String path ) {
+
+      selectdProduct.image = path;
+      newPicture = File.fromUri( Uri(path: path) );
+
+      notifyListeners();
+
+   }
 } 
