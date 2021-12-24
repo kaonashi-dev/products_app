@@ -70,11 +70,11 @@ class _ProductDetailsBody extends StatelessWidget {
                                  );
 
                                  if (selectedFile == null) {
+                                    // ignore: avoid_print
                                     print('No seleciono un archivo');
                                     return;
                                  }
 
-                                 print('Imagen: ${selectedFile.path}');
                                  productService.updateSelectedPoductImage(selectedFile.path);
                               },
                            )
@@ -91,10 +91,18 @@ class _ProductDetailsBody extends StatelessWidget {
          ),
          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
          floatingActionButton: FloatingActionButton(
-            child: const Icon( Icons.save_outlined ),
-            onPressed: () {
-               
+            child: ( productService.isSaving )
+            ? const CircularProgressIndicator(color: Colors.white, backgroundColor: Colors.deepPurple)
+            : const Icon( Icons.save_outlined ),
+            onPressed: productService.isLoading
+            ? null
+            :() async {
+
                if(!productForm.isValidateForm()) return;
+
+               final String? imageUrl = await productService.uploadImage();
+
+               if ( imageUrl != null ) productForm.product.image = imageUrl; 
 
                productService.saveOrCreateProduct(productForm.product);
 

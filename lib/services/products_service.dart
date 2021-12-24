@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,6 +12,7 @@ import 'package:products_app/models/product.dart';
 class ProductsService extends ChangeNotifier {
 
    final String _baseUrl = dotenv.get('FIREBASE_BASE_URL');
+   final String _cloudinaryUrl = dotenv.get('CLOUDINARY_BASE_URL');
    final List<Product> products = [];
    
    late Product selectdProduct;
@@ -93,6 +96,39 @@ class ProductsService extends ChangeNotifier {
       newPicture = File.fromUri( Uri(path: path) );
 
       notifyListeners();
+
+   }
+
+   Future<String?> uploadImage() async {
+
+      if ( newPicture == null ) return null;
+
+      isSaving = true;
+      notifyListeners();
+
+      final url = Uri.parse(_cloudinaryUrl);
+
+      final uploadRequest = http.MultipartRequest(
+         'POST',
+         url,
+      );
+      final file = await http.MultipartFile.fromPath('file', newPicture!.path);
+
+      uploadRequest.files.add(file);
+
+      final streamResponse = await uploadRequest.send();
+      final resp = await http.Response.fromStream(streamResponse);
+
+      if ( resp.statusCode != 200 && resp.statusCode != 201 ) {
+         print('algo salio mal :(');
+         print( resp.body );
+         return null;
+      }
+
+      newPicture = null;
+
+      final decodedData = json.decode( resp.body );
+      return decodedData['secure_url'];
 
    }
 } 
