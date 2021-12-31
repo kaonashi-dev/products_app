@@ -8,9 +8,9 @@ import 'package:products_app/shared/input_decorations.dart';
 
 import 'package:products_app/widgets/widgets.dart';
 
-class LoginScreeen extends StatelessWidget {
+class RegisterScreeen extends StatelessWidget {
 	
-	const LoginScreeen({Key? key}) : super(key: key);
+	const RegisterScreeen({Key? key}) : super(key: key);
 
 	@override
 	Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class LoginScreeen extends StatelessWidget {
 									children: [
 
 										const SizedBox(height: 10),
-										Text('LOGIN', style: Theme.of(context).textTheme.headline5),
+										Text('REGISTRO', style: Theme.of(context).textTheme.headline5),
 										const SizedBox(height: 30),
 
                               ChangeNotifierProvider(
@@ -42,14 +42,14 @@ class LoginScreeen extends StatelessWidget {
 							const SizedBox(height: 70),
                      TextButton(
                         child: const Text(
-                           'Crear una cuenta',
+                           '¿ya tienes una cuenta?',
                            style: TextStyle(color: Colors.black, fontSize: 19),
                         ),
                         style: ButtonStyle(
                            overlayColor: MaterialStateProperty.all( Colors.deepPurple.withOpacity(0.1) ),
                         ),
                         onPressed: () {
-                           Navigator.pushNamed(context, 'register');
+                           Navigator.pushNamed(context, 'login');
                         }
                      ),
 							const SizedBox(height: 50),
@@ -138,7 +138,7 @@ class _LoginForm extends StatelessWidget {
 
                      loginForm.isLoading = true;
 
-                     final String? errorMsg = await authProvider.login(loginForm.email, loginForm.password);
+                     final String? errorMsg = await authProvider.createUser(loginForm.email, loginForm.password);
 
                      if ( errorMsg == null ) {
                         loginForm.isLoading = false;
@@ -147,6 +147,8 @@ class _LoginForm extends StatelessWidget {
                         print(errorMsg);
                         loginForm.isLoading = false;
                      }
+
+
                   }
 					)
 
